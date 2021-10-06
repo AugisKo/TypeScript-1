@@ -20,6 +20,10 @@
  * egzistuoti (metodas turi grąžinti boolean reikšmę).
  * Spausdindami duomenis pasakykite, ar toks trikampis gali
  * egzistuoti.
+ *
+ * 8. Papildykite klasę metodu, kuris nurodo, ar trikampis yra
+ * statusis.
+ *
  */
 
 class Trikampis {
@@ -33,21 +37,34 @@ class Trikampis {
         this.c = c;
     }
 
-    public spaudintiDuomenis(): void {
+    public spasudintiDuomenis(): void {
         console.log(`Krastine a: ${this.a}`);
         console.log(`Krastine b: ${this.b}`);
         console.log(`Krastine b: ${this.c}`);
-        console.log(`Perimetras: ${this.perimetras()}`);
+        console.log(`Perimetras: ${this.perimetras}`);
+
+        if (this.arTrikampisEgzistuoja) {
+            console.log("Trikampis egzistuoja!");
+        } else {
+            console.log("Trikampis neegzistuoja!");
+        }
+
         console.log("---------");
     }
 
-    public perimetras(): number {
+    public get perimetras(): number {
         return this.a + this.b + this.c;
+    }
+
+    public get arTrikampisEgzistuoja(): boolean {
+        return this.a + this.b > this.c &&
+            this.b + this.c > this.a &&
+            this.a + this.c > this.b;
     }
 }
 
 const trikampis1 = new Trikampis(2, 3, 4);
 const trikampis2 = new Trikampis(6, 3, 8);
 
-trikampis1.spaudintiDuomenis();
-trikampis2.spaudintiDuomenis();
+trikampis1.spasudintiDuomenis();
+trikampis2.spasudintiDuomenis();
