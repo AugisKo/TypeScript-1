@@ -15,6 +15,11 @@
  * 6. Papildykite klasę metodu, kuris apskaičiuoja ir grąžina
  * trikampio perimetrą. Spausdinant trikampio duomenis
  * atspausdinkite ir jo perimetrą.
+ *
+ * 7. Parašykite metodą, kuris nusako, ar toks trikampis gali
+ * egzistuoti (metodas turi grąžinti boolean reikšmę).
+ * Spausdindami duomenis pasakykite, ar toks trikampis gali
+ * egzistuoti.
  */
 
 class Trikampis {
@@ -32,7 +37,12 @@ class Trikampis {
         console.log(`Krastine a: ${this.a}`);
         console.log(`Krastine b: ${this.b}`);
         console.log(`Krastine b: ${this.c}`);
+        console.log(`Perimetras: ${this.perimetras()}`);
         console.log("---------");
+    }
+
+    public perimetras(): number {
+        return this.a + this.b + this.c;
     }
 }
 

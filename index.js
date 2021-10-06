@@ -8,7 +8,11 @@ var Trikampis = (function () {
         console.log("Krastine a: " + this.a);
         console.log("Krastine b: " + this.b);
         console.log("Krastine b: " + this.c);
+        console.log("Perimetras: " + this.perimetras());
         console.log("---------");
+    };
+    Trikampis.prototype.perimetras = function () {
+        return this.a + this.b + this.c;
     };
     return Trikampis;
 }());
