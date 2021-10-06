@@ -20,9 +20,6 @@ function suma(skaicius1: number, skaicius2: number): number {
 
 // suma(123, 43);
 
-1 + "1"; // "11"
-1 + 1; // 2
-
 const z = x + y;
 
 // console.log("Labas, pasauli!");
