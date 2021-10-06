@@ -15,10 +15,20 @@ class Trikampis {
         else {
             console.log("Trikampis neegzistuoja!");
         }
+        console.log(`Trikampis ${this.arTrikampisEgzistuoja ? "egzistuoja" : "neegzistuoja"}.`);
+        console.log(`Trikampis ${this.arStatus ? "yra" : "nera"} statusis.`);
         console.log("---------");
     }
     get perimetras() {
         return this.a + this.b + this.c;
+    }
+    get arStatus() {
+        const a2 = this.a * this.a;
+        const b2 = this.b * this.b;
+        const c2 = this.c * this.c;
+        return a2 + b2 === c2 ||
+            a2 + c2 === b2 ||
+            b2 + c2 === a2;
     }
     get arTrikampisEgzistuoja() {
         return this.a + this.b > this.c &&
@@ -26,7 +36,8 @@ class Trikampis {
             this.a + this.c > this.b;
     }
 }
-const trikampis1 = new Trikampis(2, 3, 4);
-const trikampis2 = new Trikampis(6, 3, 8);
-trikampis1.spasudintiDuomenis();
-trikampis2.spasudintiDuomenis();
+const trikampiai = [new Trikampis(3, 4, 5)];
+trikampiai.push(new Trikampis(6, 3, 8));
+for (const trikampis of trikampiai) {
+    trikampis.spasudintiDuomenis();
+}
