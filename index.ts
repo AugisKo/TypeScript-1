@@ -1,84 +1,142 @@
-/**
- * TypeScript kodas "kompiliuojamas" į JavaScript kodą panaudojant tsc modulį (https://www.typescriptlang.org/download).
- * Kompiliatoriaus konfiguracija nurodoma tsconfig.json faile.
- * Kompiliacijos procesas aktyvuojamas naudojant `tsc` komandą. Papildomai galima nurodyti `--watch` argumentą.
- * 
- * Tipus galime nurodyti: 
- * - kintamiesiems (pvz. : const x: number;), 
- * - funkcijų argumentams (pvz. : function x(y: string, z: boolean)),
- * - funkcijų grąžinamos reikšmės tipui nurodyti (pvz.: function f(): string[])
- */
-
-let vardas: string = "Jurgis";
-
-const x: number = 1;
-const y: number = 1;
-
-function suma(skaicius1: number, skaicius2: number): number {
-    return skaicius1 + skaicius2;
-}
-
-// suma(123, 43);
-
-const z = x + y;
-
-// console.log("Labas, pasauli!");
-// console.log(`Labas, ${vardas}`);
-
-const vardai: string[] = ["Jonas", "Birutė", "Barbora", "Elena"];
-
-vardai.push("Gediminas");
-
-type Pasisveikinimas = "Labas" | "Sveiki" | "Ahoy";
-
-function pasisveikinti(pasisveikinimas: Pasisveikinimas, vardas: string): void {
-    console.log(`${pasisveikinimas}, ${vardas}`);
-}
-
-function pasisveikintiSuZmonemis(vardai: string[]): void {
-    const iteratorius = (vardas: string) => {
-        pasisveikinti("Labas", vardas);
-    };
-
-    vardai.forEach(iteratorius);
-}
-
-pasisveikintiSuZmonemis(vardai);
-
-// Klasės (https://www.typescriptlang.org/docs/handbook/2/classes.html)
-class Gyvenviete {
+class Produktas {
     public readonly pavadinimas: string;
-    
-    // Kvadratiniai kilometrai
-    public readonly plotas: number;
+    public readonly svoris: number;
+    public readonly kaina: number;
+    protected readonly barcode: number;
 
-    public readonly gyventojuSkaicius: number;
+    public constructor(pavadinimas: string,
+                       svoris: number,
+                       kaina: number) {
 
-    constructor(pavadinimas: string, gyventojuSkaicius: number, plotas: number) {
-        console.log("Konstruktorius iškviestas");
-
+        this.kaina = kaina;
+        this.svoris = svoris;
         this.pavadinimas = pavadinimas;
-        this.gyventojuSkaicius = gyventojuSkaicius;
-        this.plotas = plotas;
+
+        this.barcode = 100000 + Math.round(Math.random() * 10000);
     }
 
     public spausdintiDuomenis(): void {
-        console.log(`Miesto pavadinimas: ${this.pavadinimas}`);
-        console.log(`Miesto gyventoju skaičius: ${this.gyventojuSkaicius}`);
-        console.log(`Miesto plotas: ${this.plotas} km2`);
-        console.log(`Miesto tankumas: ${this.gyventojuTankumas().toFixed(1)} gyv./km2`);
-        console.log("------------");
-    }
-
-    private gyventojuTankumas(): number {
-        return this.gyventojuSkaicius / this.plotas;
+        console.log(`Produktas: ${this.pavadinimas}`);
+        console.log(`Barkodas: ${this.barcode}`);
+        console.log(`Svoris: ${this.svoris} g.`);
+        console.log(`Kaina: ${this.kaina} eur.`);
     }
 }
 
-const gyvenviete1 = new Gyvenviete("Vilnius", 587581, 401);
-const gyvenviete2 = new Gyvenviete("Klaipėda", 149157, 110);
+// Enum - https://www.typescriptlang.org/docs/handbook/enums.html
+enum BulvytesTipas {
+    Lazdeles = "lzdl",
+    Laiveliai = "lvl",
+    Puseles = "psls"
+}
 
-gyvenviete1.spausdintiDuomenis();
-gyvenviete2.spausdintiDuomenis();
+// Public - metodą arba atributą gali pasiekti bet kas
+// Private - metodą arba atributą gali pasiekti tik pati klasė
+// Protected - metodą arba atributą gali pasiekti tik pati arba
+// vaikinė klasė
+// Pvz.:
+class A {
+    public x: number;
+    private y: number;
+    protected z: number;
+}
 
-console.log(gyvenviete1.pavadinimas);
+const a = new A();
+// Galime pasiekti tik x atributą, nes jis vienintelis yra public.
+a.x;
+
+class B extends A {
+    public metodas(): void {
+        // Galime pasiekti tik x ir z atributu, nes jie nėra private
+        // yra public.
+        this.z;
+        this.x;
+    }
+}
+
+// Paveldėjimas
+// https://www.typescriptlang.org/docs/handbook/2/classes.html#extends-clauses
+class Bulvytes extends Produktas {
+    public readonly kiekis: number;
+    public readonly tipas: BulvytesTipas;
+
+    constructor(kiekis: number,
+                tipas: BulvytesTipas = BulvytesTipas.Lazdeles) {
+        // https://www.typescriptlang.org/docs/handbook/2/classes.html#super-calls
+        super("Bulvytės", 150, 2);
+
+        this.tipas = tipas;
+        this.kiekis = kiekis;
+    }
+
+    // Perrašome tėvinės klasės metodą
+    // https://www.typescriptlang.org/docs/handbook/2/classes.html#overriding-methods
+    public spausdintiDuomenis(): void {
+        super.spausdintiDuomenis();
+
+        console.log(`Kiekis: ${this.kiekis}`);
+        console.log(`Tipas: ${this.tipas}`);
+        console.log("-------");
+    }
+}
+
+enum PadazoTipas {
+    Cesnakinis,
+    Astrus,
+    Pikantiskas,
+    BBQ
+}
+
+class Padazas extends Produktas {
+    constructor(public readonly tipas: PadazoTipas,
+                pavadinimas: string) {
+        super(pavadinimas, 40, 0.6);
+    }
+
+    public spausdintiDuomenis() {
+        super.spausdintiDuomenis();
+        console.log(`Padažo tipas: ${PadazoTipas[this.tipas]}`);
+    }
+}
+
+class Kebabas extends Produktas {
+    public readonly padazai: Padazas[];
+
+    public constructor(svoris: number = 700) {
+        super("Kebabas", svoris, 4.5);
+
+        this.padazai = [];
+    }
+
+    public pridetiPadaza(padazas: Padazas): void {
+        this.padazai.push(padazas);
+    };
+
+    public spausdintiDuomenis(): void {
+        super.spausdintiDuomenis();
+
+        console.log("Padažai:");
+        console.log("================");
+        for (const padazas of this.padazai) {
+            padazas.spausdintiDuomenis();
+            console.log("---");
+        }
+        console.log("================");
+    }
+}
+
+const bulvytes = new Bulvytes(14, BulvytesTipas.Puseles);
+
+const kebabas = new Kebabas(667);
+const velniskasPadazas = new Padazas(PadazoTipas.Astrus, "Velniskas");
+const dieviskasPadazas = new Padazas(PadazoTipas.Cesnakinis, "Dieviskas");
+kebabas.pridetiPadaza(velniskasPadazas);
+kebabas.pridetiPadaza(dieviskasPadazas);
+
+kebabas.spausdintiDuomenis();
+
+enum PitosTipas {
+    PilnoGrudo,
+}
+
+
